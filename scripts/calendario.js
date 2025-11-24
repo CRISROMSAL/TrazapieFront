@@ -1,110 +1,107 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const monthYear = document.getElementById("month-year");
     const calendarGrid = document.getElementById("calendar-grid");
 
-    // Párrafos donde se mostrarán los datos
-    const pPasos = document.getElementById("p-pasos");
-    const pCalorias = document.getElementById("p-calorias");
-    const pTiempo = document.getElementById("p-tiempo");
+    const pasosElem = document.getElementById("valor-pasos");
+    const caloriasElem = document.getElementById("valor-calorias");
+    const tiempoElem = document.getElementById("valor-tiempo");
 
-    let currentDate = new Date(); // Fecha mostrada actualmente en el calendario
-    const today = new Date();     // Fecha actual
-    let historial = {};            // JSON con los datos de actividad
+    let currentDate = new Date();
 
-    // ----------- 1️⃣ Cargar JSON externo -----------
-    async function cargarHistorial() {
-        try {
-            const response = await fetch("/back/historial.json"); // ruta a tu JSON
-            historial = await response.json();
-            renderCalendar(currentDate);
-            actualizarDatos(today.getDate(), today.getMonth(), today.getFullYear()); // cargar datos hoy por defecto
-        } catch (err) {
-            console.error("Error cargando historial:", err);
-        }
+    // Obtener usuario logueado
+    const usuarioActual = JSON.parse(localStorage.getItem("usuarioActual"));
+    if (!usuarioActual) {
+        alert("No hay usuario logueado");
+        window.location.href = "login.html";
+        return;
     }
 
-    // ----------- 2️⃣ Actualizar los párrafos con los datos de un día -----------
-    function actualizarDatos(day, month, year) {
-        const clave = `${year}-${String(month + 1).padStart(2, '0')}`;
-        const datos = historial[clave]?.[day];
-
-        // Si no hay datos para ese día
-        if (!datos) {
-            document.getElementById("valor-pasos").textContent = 0;
-            document.getElementById("valor-calorias").textContent = 0;
-            document.getElementById("valor-tiempo").textContent = 0;
-            return;
-        }
-
-        // Actualizar los valores dentro de los spans
-        document.getElementById("valor-pasos").textContent = datos.pasos;
-        document.getElementById("valor-calorias").textContent = datos.calorias;
-        document.getElementById("valor-tiempo").textContent = datos.tiempo;
-    }
-
-
-    // ----------- 3️⃣ Renderizar calendario -----------
     function renderCalendar(date) {
         const year = date.getFullYear();
         const month = date.getMonth();
-        const monthNames = ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
-                            "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+        const monthNames = [
+            "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+            "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+        ];
+
         monthYear.textContent = `${monthNames[month]} ${year}`;
 
-        // eliminar días anteriores, mantener los nombres de los días
-        [...calendarGrid.querySelectorAll(".calendar__day, .calendar__empty")].forEach(el => el.remove());
+        // Limpiar calendario, mantener nombres de días
+        while (calendarGrid.children.length > 7) {
+            calendarGrid.removeChild(calendarGrid.lastChild);
+        }
 
         const firstDay = new Date(year, month, 1);
         const startDay = firstDay.getDay() === 0 ? 7 : firstDay.getDay();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        // huecos antes del primer día
         for (let i = 1; i < startDay; i++) {
             const emptyCell = document.createElement("div");
             emptyCell.classList.add("calendar__empty");
             calendarGrid.appendChild(emptyCell);
         }
 
-        // crear los días
+        const hoy = new Date();
+        const mesActual = hoy.getMonth();
+        const diaActual = hoy.getDate();
+        const anioActual = hoy.getFullYear();
+
         for (let day = 1; day <= daysInMonth; day++) {
             const cell = document.createElement("div");
             cell.classList.add("calendar__day");
             cell.textContent = day;
 
-            const cellDate = new Date(year, month, day);
+            // Solo días anteriores o iguales al actual
+            const esDiaValido = (year < anioActual) ||
+                                 (year === anioActual && month < mesActual) ||
+                                 (year === anioActual && month === mesActual && day <= diaActual);
 
-            // Bloquear días futuros
-            if (cellDate > today) {
+            if (!esDiaValido) {
                 cell.classList.add("disabled");
             } else {
-                cell.addEventListener("click", () => actualizarDatos(day, month, year));
+                cell.addEventListener("click", () => {
+                    mostrarDatosDia(day, month + 1, year);
+                });
             }
 
             calendarGrid.appendChild(cell);
         }
     }
 
-    // ----------- 4️⃣ Botones de navegación -----------
+    // Función para actualizar los datos según el día
+    function mostrarDatosDia(dia, mes, anio) {
+        const keyMes = `${anio}-${String(mes).padStart(2,"0")}`;
+        const historial = usuarioActual.historial[keyMes];
+
+        if (historial && historial[dia]) {
+            const datos = historial[dia];
+            pasosElem.textContent = datos.pasos;
+            caloriasElem.textContent = datos.calorias;
+            tiempoElem.textContent = datos.tiempo;
+        } else {
+            pasosElem.textContent = 0;
+            caloriasElem.textContent = 0;
+            tiempoElem.textContent = 0;
+        }
+    }
+
+    // Botones para navegar meses
     document.getElementById("prev").addEventListener("click", () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
         renderCalendar(currentDate);
     });
 
     document.getElementById("next").addEventListener("click", () => {
-        const nuevaFecha = new Date(currentDate);
-        nuevaFecha.setMonth(nuevaFecha.getMonth() + 1);
-
-        // Bloquear meses futuros
-        if (nuevaFecha.getFullYear() > today.getFullYear() ||
-            (nuevaFecha.getFullYear() === today.getFullYear() && nuevaFecha.getMonth() > today.getMonth())) {
-            return; // no hacer nada
+        const hoy = new Date();
+        if (currentDate.getFullYear() < hoy.getFullYear() || currentDate.getMonth() < hoy.getMonth()) {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
         }
-
-        currentDate = nuevaFecha;
-        renderCalendar(currentDate);
     });
 
-    // ----------- 5️⃣ Inicializar -----------
-    cargarHistorial();
+    // Al cargar, mostrar calendario y datos del día de hoy
+    renderCalendar(currentDate);
+    const hoy = new Date();
+    mostrarDatosDia(hoy.getDate(), hoy.getMonth() + 1, hoy.getFullYear());
 });
