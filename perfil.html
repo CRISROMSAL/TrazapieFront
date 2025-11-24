@@ -1,6 +1,7 @@
 <html>
     <!DOCTYPE html>
     <head>
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="/TrazapieFront/estilos/main.css">
     </head>
 
@@ -8,14 +9,14 @@
         <main>
             <header class="banda">
                 <div class="bandaIzquierda">
-                    <a href="/TrazapieFront//dashboard.html">
-                        <img src="/TrazapieFront//img/logoTrazapie3.png" alt="icono" class="bandaIcono">
+                    <a href="/TrazapieFront/dashboard.html">
+                        <img src="/TrazapieFront/img/logoTrazapie3.png" alt="icono" class="bandaIcono">
                     </a>
                 </div>
                     <div class="bandaDerecha">
-                    <p class="bandaTexto">Antonio García</p>
+                    <p class="bandaTexto" id="nombreUsuario">--</p>
                     <div class="menu">
-                        <img src="/TrazapieFront//img/persona.png" alt="Menú" class="bandaMenu" id="menuToggle">
+                        <img src="/TrazapieFront/img/persona.png" alt="Menú" class="bandaMenu" id="menuToggle">
                         <ul class="desplegable" id="menuDesplegable">
                             <li>
                                 <a href="/TrazapieFront/dashboard.html">Página de inicio</a>
@@ -33,24 +34,20 @@
 
             <div class="tresColumnas">
                 <div class="columna columnaIzquierda">
-                    <img src="/TrazapieFront//img/Foto.png" alt="Imagen descriptiva">
+                    <img src="/TrazapieFront/img/Foto.png" alt="Imagen descriptiva">
                 </div>
 
                 <div class="columnaCentral">
-                    <p>Mejor Marca Personal</p>
-                    <p>10/10/2025</p>
-                    <p>18320 pasos</p>
-                    <p>2:05 horas de actividad</p>
-                    <p>671 calorías</p>
+                    
                 </div>
 
                 <div class="columnaDerecha">
-                    <p>Nombre: Antonio</p>
-                    <p>Apellidos: García Martín</p>
-                    <p>Edad: 28 años</p>
-                    <p>Peso: 78 kilos</p>
-                    <p>Alturas: 170 cm</p>
-                    <p>Objetivo: 30.000 pasos</p>
+                    <p>Nombre: <span id="nombrePerfil">--</span></p>
+                    <p>Correo: <span id="correoPerfil">--</span></p>
+                    <p>Edad: <span id="edadPerfil">--</span> años</p>
+                    <p>Peso: <span id="pesoPerfil">--</span> kilos</p>
+                    <p>Altura: <span id="alturaPerfil">--</span> cm</p>
+                    <p>Objetivo: <span id="objetivoPerfil">--</span></p>
 
                     <button class="columnaBoton">Guardar</button>
                 </div>
@@ -60,5 +57,6 @@
             
     <footer>
         <script src="/TrazapieFront/scripts/utilidades.js"></script>
+        <script src="/TrazapieFront/scripts/perfil.js"></script>
     </footer>
 </html>

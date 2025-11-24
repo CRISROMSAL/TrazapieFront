@@ -2,8 +2,12 @@
   "usuarios": [
     {
       "username": "antonio",
-      "email": "antonio",
+      "email": "antonio@example.com",
       "password": "1111",
+      "edad": 28,
+      "peso": 78,
+      "altura": 170,
+      "objetivo": "30.000 pasos",
       "historial": {
         "2025-10": {
           "1": { "pasos": 4500, "calorias": 230, "tiempo": 40 },
@@ -41,7 +45,11 @@
     {
       "username": "maria",
       "email": "maria@example.com",
-      "password": "abcd",
+      "password": "1111",
+      "edad": 25,
+      "peso": 65,
+      "altura": 165,
+      "objetivo": "25.000 pasos",
       "historial": {
         "2025-11": {
           "1": { "pasos": 6200, "calorias": 330, "tiempo": 55 },
@@ -54,6 +62,10 @@
       "username": "pepe",
       "email": "pepe@example.com",
       "password": "1111",
+      "edad": 30,
+      "peso": 80,
+      "altura": 175,
+      "objetivo": "28.000 pasos",
       "historial": {
         "2025-10": {
           "5": { "pasos": 9000, "calorias": 480, "tiempo": 85 },

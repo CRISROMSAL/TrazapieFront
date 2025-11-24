@@ -124,6 +124,10 @@ input::placeholder{
         align-items: flex-end;
     }
 
+    .bandaIzquierda{
+        padding-left: 200px;
+    }
+
     .bandaIcono{
         width: 160px;
         padding-left: 40;
@@ -185,7 +189,7 @@ input::placeholder{
 
     .datoFila p{
         color: variables.$colorPrimario;
-        font-size: 22px;
+        font-size: 18px;
     }
 
     .datoFila img{
@@ -433,6 +437,7 @@ fila
     color: variables.$colorPrimario;
     font-weight: bold;
     padding: 4px;
+    text-align: center;
 }
 
 .columnaDerecha {
