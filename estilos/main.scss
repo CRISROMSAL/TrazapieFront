@@ -77,6 +77,10 @@ input {
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
+
+    &:active {
+        transform: scale(0.95); // Microinteracción de presión
+    }
 }
 
 .campos {
@@ -436,4 +440,36 @@ input {
         transform: scale(1.05);
         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
+}
+
+// --- MICROINTERACCIONES DE FEEDBACK (BLOQUE C) ---
+
+// 1. Efecto Sacudida
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.input-error {
+    border: 2px solid #ff4d4d !important;
+    animation: shake 0.3s ease-in-out;
+}
+
+// 2. Feedback de "Pulsación"
+.btn-feedback:active {
+    transform: scale(0.95);
+}
+
+// 3. Animación de "Latido"
+// Nota: He quitado la variable dentro del keyframe para evitar el error de VS Code
+@keyframes pulse-steps {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.pulse-animation {
+    display: inline-block; // Asegura que la animación de escala funcione bien
+    animation: pulse-steps 0.4s ease-out;
 }
